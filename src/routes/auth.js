@@ -13,7 +13,7 @@ const router = express.Router();
 // Register
 router.post('/register', async (req, res) => {
   //Validate the request body
-  const { error } = registerSchema(req.body);
+  const { error } = registerSchema.validate(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
   
   const { name, email, password, role } = req.body;
