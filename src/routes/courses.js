@@ -58,7 +58,7 @@ router.delete('/:courseId', authMiddleware, role('instructor'), async (req, res)
     return res.status(403).json({ message: 'Forbidden: You do not own this course' });
   }
   
-  await course.remove();
+  await course.deleteOne();
   res.json({ message: 'Course deleted successfully' });
 });
 
