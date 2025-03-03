@@ -1,0 +1,32 @@
+PASS __tests__/app.test.js (9.334 s)
+  Advanced E-Learning Platform API Integration Tests
+    User Authentication
+      ✓ should register an instructor successfully (221 ms)
+      ✓ should register a student successfully (107 ms)
+      ✓ should login as instructor and receive a token (98 ms)
+      ✓ should login as student and receive a token (110 ms)
+    Course Management
+      ✓ should allow an instructor to create a course (21 ms)
+      ✓ should not allow a student to create a course (19 ms)
+      ✓ should get all courses (34 ms)
+      ✓ should allow an instructor to update a course (29 ms)
+      ✓ should allow an instructor to delete a course (19 ms)
+    Enrollment
+      ✓ should allow a student to enroll in a course (18 ms)
+      ✓ should not allow an instructor to enroll in a course (8 ms)
+    Media Upload
+      ✓ should allow an instructor to upload media (945 ms)
+    Analytics
+      ✓ should return an analytics summary (16 ms)
+    Password Reset and Change
+      ✓ should send a password reset email for a valid email (24 ms)
+      ✓ should reset the password using a valid token (5265 ms)
+      ✓ should fail to reset the password with an invalid token (9 ms)
+      ✓ should change password for a logged-in user with the correct current password (347 ms)
+      ✓ should fail to change the password with an incorrect current password (197 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       18 passed, 18 total
+Snapshots:   0 total
+Time:        9.359 s, estimated 10 s
+Ran all test suites.

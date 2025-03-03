@@ -35,15 +35,18 @@ router.post('/register', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
+  console.log('Login attempt for:', req.body.email);
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) return res.status(400).json({ message: 'User not found' });
 
+  console.log('Login attempt for:', email);
+  console.log('Stored hash:', user.password);
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
   const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  res.json({ 'token': token });
+  res.json({ token });
 });
 
 // Forgot Password: Generates a reset token and sends a reset email.
@@ -93,7 +96,7 @@ router.post('/reset-password/:resetToken', async (req, res) => {
     }
 
     // Update the password and clear reset token fields
-    user.password = await bcrypt.hash(newPassword, 10);
+    user.password = newPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
@@ -101,6 +104,10 @@ router.post('/reset-password/:resetToken', async (req, res) => {
     // Immediately verify the updated user document:
     const updatedUser = await User.findById(user._id);
     console.log('Updated user:', updatedUser); // For debugging
+
+    // Re-fetch the user and log the stored hash and verify with bcrypt.compare
+    const passwordMatches = await bcrypt.compare(newPassword, updatedUser.password);
+    console.log('Password match check:', passwordMatches); // Should be true
 
     // Send confirmation email
     const message = 'Your password has been successfully changed.';
@@ -129,7 +136,7 @@ router.post('/change-password', authMiddleware, async (req, res) => {
     }
 
     // Update password
-    user.password = await bcrypt.hash(newPassword, 10);
+    user.password = newPassword;
     await user.save();
 
     // Send email notification

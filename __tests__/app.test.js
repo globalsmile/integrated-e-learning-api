@@ -243,12 +243,14 @@ describe('Advanced E-Learning Platform API Integration Tests', () => {
       const user = await User.findOne({ email: testUserEmail });
       expect(user).toHaveProperty('resetPasswordToken');
       resetToken = user.resetPasswordToken;
+      console.log('resetToken:', resetToken);
     });
 
 
-    // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
     it('should reset the password using a valid token', async () => {
+      console.log('resetToken:', resetToken);
       const newPassword = 'newPassword456';
       const res = await request(app)
         .post(`/api/auth/reset-password/${resetToken}`)
@@ -257,7 +259,7 @@ describe('Advanced E-Learning Platform API Integration Tests', () => {
       expect(res.body).toHaveProperty('message');
 
       // Wait 100ms before attempting to log in
-      // await delay(5000);
+      await delay(5000);
 
       // Verify that the user can now log in with the new password
       const loginRes = await request(app)
