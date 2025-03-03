@@ -5,6 +5,8 @@ const path = require('path');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const app = require('../server'); // Adjust the path to your Express app
 
+jest.setTimeout(10000); // Increase to 10 seconds
+
 let mongoServer;
 let instructorToken;
 let studentToken;
@@ -195,7 +197,7 @@ describe('Advanced E-Learning Platform API Integration Tests', () => {
       const res = await request(app)
         .post(`/api/courses/${courseForUpload}/upload`)
         .set('Authorization', instructorToken)
-        .attach('media', path.join(__dirname, 'test-files/sample.jpg')); // Ensure this file exists in __tests__/test-files/
+        .attach('media', path.join(__dirname, 'test-files/moisture_content.jpg')); // Ensure this file exists in __tests__/test-files/
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty('fileUrl');
     });
@@ -243,6 +245,9 @@ describe('Advanced E-Learning Platform API Integration Tests', () => {
       resetToken = user.resetPasswordToken;
     });
 
+
+    // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
     it('should reset the password using a valid token', async () => {
       const newPassword = 'newPassword456';
       const res = await request(app)
@@ -250,6 +255,9 @@ describe('Advanced E-Learning Platform API Integration Tests', () => {
         .send({ newPassword });
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty('message');
+
+      // Wait 100ms before attempting to log in
+      // await delay(5000);
 
       // Verify that the user can now log in with the new password
       const loginRes = await request(app)

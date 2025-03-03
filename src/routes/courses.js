@@ -94,7 +94,7 @@ router.post('/:courseId/upload', authMiddleware, role('instructor'), upload.sing
     return res.status(400).json({ message: 'No file uploaded' });
   }
   // Save file information to course document if needed.
-  res.json({ message: 'Media uploaded successfully', file: req.file });
+  res.json({ message: 'Media uploaded successfully', fileUrl: req.file.path });
 });
 
 module.exports = router;

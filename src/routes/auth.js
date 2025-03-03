@@ -43,7 +43,7 @@ router.post('/login', async (req, res) => {
   if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
   const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  res.json({ token });
+  res.json({ 'token': token });
 });
 
 // Forgot Password: Generates a reset token and sends a reset email.
@@ -70,7 +70,7 @@ router.post('/forgot-password', async (req, res) => {
                     `${resetUrl}\n\n` +
                     `If you did not request a password reset, please ignore this email.`;
 
-    await sendEmail(user.email, 'Password Reset Request', message);
+    await sendEmail(user.email, 'Password Reset Request', `Your reset token is ${resetToken}`);
     res.json({ message: 'Password reset email sent' });
   } catch (error) {
     console.error('Forgot Password Error:', error);
@@ -97,6 +97,10 @@ router.post('/reset-password/:resetToken', async (req, res) => {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
+
+    // Immediately verify the updated user document:
+    const updatedUser = await User.findById(user._id);
+    console.log('Updated user:', updatedUser); // For debugging
 
     // Send confirmation email
     const message = 'Your password has been successfully changed.';
