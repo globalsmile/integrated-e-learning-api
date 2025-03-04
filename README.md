@@ -317,5 +317,3 @@ Ran all test suites.
 
 ## **Conclusion**
 The Advanced E-Learning Platform RESTful API is a feature-rich project that demonstrates modern web development practices, including secure authentication, role-based access control, request validation, email notifications, media uploads, and analytics. This project has been a significant learning experience, reinforcing the importance of robust repository management, thorough testing, and the integration of external services.
-
-For further details or questions, please refer to the documentation provided or contact the project maintainer.
